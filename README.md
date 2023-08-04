@@ -5,7 +5,7 @@ Search the location to get the weather
 ![Screenshot](https://github.com/JosephatJuma/Weather-App/blob/main/Screenshot1.png)
 
 ## Dark Theme
-![Screenshot](https://github.com/JosephatJuma/Weather-App/blob/main/Screenshott.png)
+![Screenshot](https://github.com/JosephatJuma/Weather-App/blob/main/screenshott.png)
 
 
 How tpo run the weather app on your machine
