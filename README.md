@@ -1,7 +1,7 @@
 # Weather-App
 Search the location to get the weather
 
-![Screenshot](https://github.com/JosephatJuma/Weather-App/raw/main/screenshot1.png)
+![Screenshot](https://github.com/JosephatJuma/Weather-App/main/screenshot1.png)
 
 
 How tpo run the weather app on your machine
