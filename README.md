@@ -1,6 +1,8 @@
 # Weather-App
 Search the location to get the weather
 
+<img src="./Screenshot 2023-08-04 194956.png/>
+
 How tpo run the weather app on your machine
 step 1: Open the commandline, navigate to the folder where u want to create the weather app.
 step 2: create weather app using command npx  create-react-app weather-app.
