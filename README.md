@@ -1,7 +1,7 @@
 # Weather-App
 Search the location to get the weather
 
-![Screenshot](https://github.com/JosephatJuma/Weather-App/screenshott.png)
+![Screenshot](https://github.com/JosephatJuma/Weather-App/screenshot1.png)
 
 How tpo run the weather app on your machine
 step 1: Open the commandline, navigate to the folder where u want to create the weather app.
