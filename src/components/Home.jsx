@@ -80,22 +80,20 @@ export function Home({ toggleColorScheme, theme }) {
     }
   };
 
-  const useDevicePosition = (evt) => {
+  const deviceLocation = (evt) => {
     const location = "Kampala";
-    if (evt.key === "Enter") {
-      setQuery(location);
-      fetch(
-        `${api_key.base}weather?q=${query}&units=metric&APPID=${api_key.key}`
-      )
-        .then((res) => res.json())
-        .then((result) => {
-          setWeather(result);
+    setQuery(location);
+    fetch(
+      `${api_key.base}weather?q=${location}&units=metric&APPID=${api_key.key}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        setWeather(result);
 
-          console.log(result);
-          setIsSearch(false);
-        });
-      console.log(location);
-    }
+        console.log(result);
+        setIsSearch(false);
+      });
+    console.log(location);
   };
 
   const features = [
@@ -150,6 +148,10 @@ export function Home({ toggleColorScheme, theme }) {
       </div>
     </Card>
   ));
+
+  React.useEffect(() => {
+    deviceLocation();
+  }, []);
   return (
     <div className={classes.wrapper}>
       <Card
@@ -171,7 +173,7 @@ export function Home({ toggleColorScheme, theme }) {
               onKeyPress={search}
               onChange={(e) => setQuery(e.target.value)}
               //isSerach={isSearch}
-              //getCurrentLocation={useDevicePosition}
+              //getCurrentLocation={deviceLocation}
             />
             <ActionIcon onClick={open}>
               <IconSettings />
@@ -235,9 +237,10 @@ export function Home({ toggleColorScheme, theme }) {
               size="lg"
               radius="md"
               mt="xl"
-              onClick={useDevicePosition}
+              onClick={deviceLocation}
+              disabled={weather.name === "Kampala"}
             >
-              Use this location
+              Check for Kampala
             </Button>
           </Card>
         </Col>
