@@ -62,7 +62,7 @@ export function Home({ toggleColorScheme, theme }) {
   const [query, setQuery] = useState("Kampala");
   const [weather, setWeather] = useState({});
   const [isSearch, setIsSearch] = useState(true);
-  const [error, setError] = useState({});
+  //const [error, setError] = useState({});
   const [opened, { open, close }] = useDisclosure(false);
   const search = (evt) => {
     if (evt.key === "Enter") {
@@ -72,7 +72,7 @@ export function Home({ toggleColorScheme, theme }) {
         .then((res) => res.json())
         .then((result) => {
           setWeather(result);
-          //console.log(result);
+          console.log(result);
           setIsSearch(false);
         });
     }
@@ -95,51 +95,55 @@ export function Home({ toggleColorScheme, theme }) {
     {
       icon: IconCloud,
       title: "Clouds",
-      description:
-        "All packages are published under MIT license, you can use Mantine in any project",
-      value: weather.main ? weather.main.temp : "None",
+      description: "The amount of clouds",
+      value: weather.main ? weather.clouds.all : "None",
     },
     {
       icon: IconRainbow,
       title: "Humidity",
-      description:
-        "Build type safe applications, all components and hooks export types",
+      description: "The level of Humidity",
       value: weather.main ? weather.main.humidity : "None",
     },
     {
       icon: IconCircleDotted,
       title: "Pressure",
-      description:
-        "With new :focus-visible selector focus ring will appear only when user navigates with keyboard",
+      description: "Current pressure level",
       value: weather.main ? weather.main.pressure : "None",
     },
     {
       icon: IconFlame,
       title: "Speed of Wind",
-      description:
-        "Customize colors, spacing, shadows, fonts and many other settings with global theme object",
+      description: "The current Speed of wind",
       value: weather.main ? weather.wind.speed : "None",
     },
   ];
 
   const items = features.map((feature) => (
     <Card shadow="lg" radius={"lg"} withBorder>
-      <div key={feature.title}>
-        <ThemeIcon
-          size={44}
-          radius="md"
-          variant="gradient"
-          gradient={{ deg: 133, from: "blue", to: "cyan" }}
-        >
-          <feature.icon size={rem(26)} stroke={1.5} />
-        </ThemeIcon>
-        <Text fz="lg" mt="sm" fw={500}>
-          {feature.title}
-        </Text>
-        <Text c="dimmed" fz="sm">
-          {feature.value}
-        </Text>
-      </div>
+      <Flex>
+        <div>
+          <ThemeIcon
+            size={44}
+            radius="md"
+            variant="gradient"
+            gradient={{ deg: 133, from: "blue", to: "cyan" }}
+          >
+            <feature.icon size={rem(26)} stroke={1.5} />
+          </ThemeIcon>
+
+          <Text fz="lg" mt="sm" fw={500}>
+            {feature.title}
+          </Text>
+          <Text fz="lg" mt="sm" fw={500}>
+            {feature.description}
+          </Text>
+        </div>
+        <div>
+          <Title c="dimmed" fz="xl">
+            {feature.value}
+          </Title>
+        </div>
+      </Flex>
     </Card>
   ));
 
@@ -218,7 +222,7 @@ export function Home({ toggleColorScheme, theme }) {
                     )}
                   </>
                 ) : (
-                  <p>City not identified</p>
+                  <Text>City not identified</Text>
                 )
               ) : (
                 ""
@@ -247,7 +251,7 @@ export function Home({ toggleColorScheme, theme }) {
             {items}
           </SimpleGrid>
           <Card m={2} shadow="lg" radius={"md"} mt={10} withBorder>
-            <Text>Card</Text>
+            <Text>Forecast is coming soon</Text>
           </Card>
         </Col>
       </Grid>

@@ -7,19 +7,13 @@ import {
   createStyles,
   Stack,
   rem,
-  ScrollArea,
-  ThemeIcon,
 } from "@mantine/core";
 import {
   IconHome2,
-  IconGauge,
   IconDeviceDesktopAnalytics,
-  IconFingerprint,
   IconCalendarStats,
   IconUser,
   IconSettings,
-  IconLogout,
-  IconSwitchHorizontal,
 } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
