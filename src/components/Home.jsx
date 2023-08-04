@@ -37,7 +37,7 @@ import { useDisclosure } from "@mantine/hooks";
 const useStyles = createStyles((theme) => ({
   wrapper: {
     padding: `calc(${theme.spacing.xl} * 2) ${theme.spacing.xl}`,
-    width: "90%",
+    width: "1000%",
     //marginLeft: 100,
   },
 
@@ -72,11 +72,9 @@ export function Home({ toggleColorScheme, theme }) {
         .then((res) => res.json())
         .then((result) => {
           setWeather(result);
-
-          console.log(result);
+          //console.log(result);
           setIsSearch(false);
         });
-      console.log(query);
     }
   };
 
@@ -89,11 +87,8 @@ export function Home({ toggleColorScheme, theme }) {
       .then((res) => res.json())
       .then((result) => {
         setWeather(result);
-
-        console.log(result);
         setIsSearch(false);
       });
-    console.log(location);
   };
 
   const features = [
@@ -102,29 +97,28 @@ export function Home({ toggleColorScheme, theme }) {
       title: "Clouds",
       description:
         "All packages are published under MIT license, you can use Mantine in any project",
-
-      //value: weather.main !== "undefined" ? weather.main.temp : "None",
+      value: weather.main ? weather.main.temp : "None",
     },
     {
       icon: IconRainbow,
       title: "Humidity",
       description:
         "Build type safe applications, all components and hooks export types",
-      //value: weather.main !== "undefined" ? weather.main.humidity : "None",
+      value: weather.main ? weather.main.humidity : "None",
     },
     {
       icon: IconCircleDotted,
       title: "Pressure",
       description:
         "With new :focus-visible selector focus ring will appear only when user navigates with keyboard",
-      //value: weather.main !== "undefined" ? weather.main.pressure : "None",
+      value: weather.main ? weather.main.pressure : "None",
     },
     {
       icon: IconFlame,
       title: "Speed of Wind",
       description:
         "Customize colors, spacing, shadows, fonts and many other settings with global theme object",
-      //value: weather.main !== "undefined" ? weather.wind.speed : "None",
+      value: weather.main ? weather.wind.speed : "None",
     },
   ];
 
@@ -252,6 +246,9 @@ export function Home({ toggleColorScheme, theme }) {
           >
             {items}
           </SimpleGrid>
+          <Card m={2} shadow="lg" radius={"md"} mt={10} withBorder>
+            <Text>Card</Text>
+          </Card>
         </Col>
       </Grid>
       <Drawer
