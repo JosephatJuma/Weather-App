@@ -6,18 +6,10 @@ import {
   Text,
   Button,
   ThemeIcon,
-  Grid,
-  Col,
-  rem,
-  Card,
-  Group,
-  ActionIcon,
-  TextInput,
-  Image,
-  Flex,
-  Drawer,
-  Switch,
+  ScrollArea,
 } from "@mantine/core";
+import { Col, rem, Card, Group, ActionIcon, Image, Grid } from "@mantine/core";
+import { Flex, Drawer, Switch, Tabs, Paper, TextInput } from "@mantine/core";
 import clouds from "../img/clouds.png";
 import rain from "../img/rain.png";
 import sun from "../img/sun.png";
@@ -78,10 +70,10 @@ export function Home({ toggleColorScheme, theme }) {
     }
   };
 
-  const deviceLocation = (evt) => {
+  const deviceLocation = async (evt) => {
     const location = "Kampala";
     setQuery(location);
-    fetch(
+    await fetch(
       `${api_key.base}weather?q=${location}&units=metric&APPID=${api_key.key}`
     )
       .then((res) => res.json())
@@ -117,10 +109,53 @@ export function Home({ toggleColorScheme, theme }) {
       value: weather.main ? weather.wind.speed : "None",
     },
   ];
+  const [forecast, setForecast] = useState({});
+  React.useEffect(() => {
+    deviceLocation();
+  }, []);
+
+  React.useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          console.log("Latitude:", latitude);
+          console.log("Longitude:", longitude);
+          // Do something with the location data
+          fetch(
+            //`${api_key.base}onecall?lat=${latitude}&lon=${longitude}&appid=${api_key.key}`
+            `${api_key.base}onecall?lat=${latitude}&lon=${longitude}&appid=${api_key.key}`
+          )
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data);
+              setForecast(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not available");
+    }
+  }, []);
 
   const items = features.map((feature) => (
     <Card shadow="lg" radius={"lg"} withBorder>
-      <Flex>
+      <Flex
+        style={{
+          justifyContent: "space-between",
+          alignContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div>
           <ThemeIcon
             size={44}
@@ -130,15 +165,11 @@ export function Home({ toggleColorScheme, theme }) {
           >
             <feature.icon size={rem(26)} stroke={1.5} />
           </ThemeIcon>
-
+        </div>
+        <div>
           <Text fz="lg" mt="sm" fw={500}>
             {feature.title}
           </Text>
-          <Text fz="lg" mt="sm" fw={500}>
-            {feature.description}
-          </Text>
-        </div>
-        <div>
           <Title c="dimmed" fz="xl">
             {feature.value}
           </Title>
@@ -147,9 +178,6 @@ export function Home({ toggleColorScheme, theme }) {
     </Card>
   ));
 
-  React.useEffect(() => {
-    deviceLocation();
-  }, []);
   return (
     <div className={classes.wrapper}>
       <Card
@@ -161,7 +189,6 @@ export function Home({ toggleColorScheme, theme }) {
       >
         <Group sx={{ justifyContent: "space-between" }}>
           <Title size={20}>Hello User</Title>
-
           <Group>
             <TextInput
               icon={<IconSearch />}
@@ -199,7 +226,6 @@ export function Home({ toggleColorScheme, theme }) {
                         <Title>
                           {weather.name},{weather.sys.country}
                         </Title>
-                        <p>Speed of wind: {weather.wind.speed}</p>
                         <Title>{weather.main.temp}°C</Title>
                       </div>
                       {weather.weather && (
@@ -220,6 +246,13 @@ export function Home({ toggleColorScheme, theme }) {
                     {weather && (
                       <Text c="dimmed">{weather.weather[0].description}</Text>
                     )}
+                    <SimpleGrid
+                      cols={2}
+                      spacing={20}
+                      breakpoints={[{ maxWidth: "md", cols: 1 }]}
+                    >
+                      {items}
+                    </SimpleGrid>
                   </>
                 ) : (
                   <Text>City not identified</Text>
@@ -243,15 +276,112 @@ export function Home({ toggleColorScheme, theme }) {
           </Card>
         </Col>
         <Col span={12} md={7}>
-          <SimpleGrid
-            cols={2}
-            spacing={20}
-            breakpoints={[{ maxWidth: "md", cols: 1 }]}
-          >
-            {items}
-          </SimpleGrid>
           <Card m={2} shadow="lg" radius={"md"} mt={10} withBorder>
             <Text>Forecast is coming soon</Text>
+            <Tabs
+              //defaultValue={Object.keys(forecast).length > 0 && forecast[0].dt}
+              defaultValue={
+                Object.keys(forecast).length > 0 && forecast.daily[0].dt
+              }
+              unstyled
+              styles={(theme) => ({
+                tab: {
+                  ...theme.fn.focusStyles(),
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[6]
+                      : theme.white,
+                  color:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[0]
+                      : theme.colors.gray[9],
+                  border: `${rem(1)} solid ${
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[6]
+                      : theme.colors.gray[4]
+                  }`,
+                  padding: `${theme.spacing.xs} ${theme.spacing.md}`,
+                  cursor: "pointer",
+                  fontSize: theme.fontSizes.sm,
+                  display: "flex",
+                  alignItems: "center",
+
+                  "&:disabled": {
+                    opacity: 0.5,
+                    cursor: "not-allowed",
+                  },
+
+                  "&:not(:first-of-type)": {
+                    borderLeft: 0,
+                  },
+
+                  "&:first-of-type": {
+                    borderTopLeftRadius: theme.radius.md,
+                    borderBottomLeftRadius: theme.radius.md,
+                  },
+
+                  "&:last-of-type": {
+                    borderTopRightRadius: theme.radius.md,
+                    borderBottomRightRadius: theme.radius.md,
+                  },
+
+                  "&[data-active]": {
+                    backgroundColor: theme.fn.primaryColor(),
+                    borderColor: theme.colors.blue[7],
+                    color: theme.white,
+                  },
+                },
+                tabIcon: {
+                  marginRight: theme.spacing.xs,
+                  display: "flex",
+                  alignItems: "center",
+                },
+
+                tabsList: {
+                  display: "flex",
+                },
+              })}
+            >
+              <ScrollArea>
+                <Tabs.List>
+                  {Object.keys(forecast).length > 0 &&
+                    forecast.daily.map((item, index) => {
+                      const date = new Date(item.dt * 1000);
+                      const dateString = date.toLocaleDateString();
+                      return (
+                        <Tabs.Tab value={`${item.dt}`}>{dateString}</Tabs.Tab>
+                      );
+                    })}
+                </Tabs.List>
+              </ScrollArea>
+              {Object.keys(forecast).length > 0 &&
+                forecast.daily.map((item, index) => {
+                  const date = new Date(item.dt * 1000);
+                  const dateString = date.toLocaleString();
+                  return (
+                    <Tabs.Panel value={`${item.dt}`} pt="xs">
+                      <Paper
+                        shadow="sm"
+                        padding="auto"
+                        radius="sm"
+                        withBorder
+                        className={classes.category}
+                        p={10}
+                        key={index}
+                      >
+                        <Group>
+                          <Text size={"lg"} fw={"bold"}>
+                            {dateString}
+                          </Text>
+                        </Group>
+                        <Group>
+                          <Text>Time Zone: {forecast.timezone}</Text>
+                        </Group>
+                      </Paper>
+                    </Tabs.Panel>
+                  );
+                })}
+            </Tabs>
           </Card>
         </Col>
       </Grid>
@@ -262,15 +392,18 @@ export function Home({ toggleColorScheme, theme }) {
         position="right"
         size={"xs"}
       >
-        <Group position="center" my={30}>
-          <Switch
-            checked={theme === "dark"}
-            onChange={() => toggleColorScheme()}
-            size="lg"
-            onLabel={<IconSun size="1.25rem" stroke={1.5} />}
-            offLabel={<IconMoonStars size="1.25rem" stroke={1.5} />}
-          />
-        </Group>
+        <Drawer.Body>
+          <Group position="center" my={30}>
+            <Title>Change theme</Title>
+            <Switch
+              checked={theme === "dark"}
+              onChange={() => toggleColorScheme()}
+              size="lg"
+              onLabel={<IconSun size="1.25rem" stroke={1.5} />}
+              offLabel={<IconMoonStars size="1.25rem" stroke={1.5} />}
+            />
+          </Group>
+        </Drawer.Body>
       </Drawer>
     </div>
   );

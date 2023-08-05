@@ -1,19 +1,10 @@
 import { useState } from "react";
-import {
-  Navbar,
-  Center,
-  Tooltip,
-  UnstyledButton,
-  createStyles,
-  Stack,
-  rem,
-} from "@mantine/core";
+import { Navbar, createStyles, Stack, rem } from "@mantine/core";
+import { Tooltip, UnstyledButton } from "@mantine/core";
 import {
   IconHome2,
   IconDeviceDesktopAnalytics,
   IconCalendarStats,
-  IconUser,
-  IconSettings,
 } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
@@ -67,12 +58,10 @@ const mockdata = [
   { icon: IconHome2, label: "Home" },
   { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
   { icon: IconCalendarStats, label: "Releases" },
-  { icon: IconUser, label: "Account" },
-  { icon: IconSettings, label: "Settings" },
 ];
 
 export function NavBar() {
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState(0);
 
   const links = mockdata.map((link, index) => (
     <NavbarLink
@@ -86,13 +75,12 @@ export function NavBar() {
   return (
     <Navbar
       height={550}
-      width={{ base: 80 }}
+      width={{ base: 80, innerHeight: 100 }}
       p="md"
-      //style={{ position: "fixed" }}
+      sx={{ position: "sticky" }}
     >
-      <Center>
-        <h6>Weather Now</h6>
-      </Center>
+      <h6>Weather Now</h6>
+
       <Navbar.Section grow mt={50}>
         <Stack justify="center" spacing={0}>
           {links}
