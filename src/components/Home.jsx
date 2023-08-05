@@ -13,6 +13,8 @@ import { Flex, Drawer, Switch, Tabs, Paper, TextInput } from "@mantine/core";
 import clouds from "../img/clouds.png";
 import rain from "../img/rain.png";
 import sun from "../img/sun.png";
+import sunrise from "../img/sunrise.png";
+import sunset from "../img/sunset.png";
 import {
   IconFlame,
   IconCircleDotted,
@@ -376,6 +378,40 @@ export function Home({ toggleColorScheme, theme }) {
                         </Group>
                         <Group>
                           <Text>Time Zone: {forecast.timezone}</Text>
+                          <IconCloud /> {item.clouds}
+                        </Group>
+                        <Flex style={{ justifyContent: "space-between" }}>
+                          <div>
+                            <Title style={{ textTransform: "capitalize" }}>
+                              {item.weather[0].description}
+                            </Title>
+                          </div>
+                          {weather.weather && (
+                            <div>
+                              {item.weather[0].main === "Clouds" && (
+                                <Image src={clouds} width={100} />
+                              )}
+                              {item.weather[0].main === "Rain" && (
+                                <Image src={rain} width={100} />
+                              )}
+                              {item.weather[0].main === "Clear" && (
+                                <Image src={sun} width={100} />
+                              )}
+                              <p>{item.weather[0].main}</p>
+                            </div>
+                          )}
+                        </Flex>
+                        <Group>
+                          <Text>Max Temperature: {item.temp.max}</Text>
+                          <Text>Min Temperature: {item.temp.min}</Text>
+                        </Group>
+                        <Group>
+                          <Image src={sunrise} width={100} />
+                          <Text>Sun Rise</Text>
+                        </Group>
+                        <Group>
+                          <Image src={sunset} width={100} />
+                          <Text>Sun Set</Text>
                         </Group>
                       </Paper>
                     </Tabs.Panel>
